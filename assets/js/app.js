@@ -130,24 +130,24 @@ pirate = L.tileLayer.provider('MapBox', {
 });
 
 
-// var mapquestOSM = L.tileLayer("https://{s}.mqcdn.com/tiles/1.0.0/osm/{z}/{x}/{y}.png", {
-//     maxZoom: 19,
-//     subdomains: ["otile1-s", "otile2-s", "otile3-s", "otile4-s"],
-//     attribution: 'Tiles courtesy of <a href="http://www.mapquest.com/" target="_blank">MapQuest</a> <img src="https://developer.mapquest.com/content/osm/mq_logo.png">. Map data (c) <a href="http://www.openstreetmap.org/" target="_blank">OpenStreetMap</a> contributors, CC-BY-SA.'
-// });
-// var mapquestOAM = L.tileLayer("https://{s}.mqcdn.com/tiles/1.0.0/sat/{z}/{x}/{y}.jpg", {
-//     maxZoom: 18,
-//     subdomains: ["otile1-s", "otile2-s", "otile3-s", "otile4-s"],
-//     attribution: 'Tiles courtesy of <a href="http://www.mapquest.com/" target="_blank">MapQuest</a>. Portions Courtesy NASA/JPL-Caltech and U.S. Depart. of Agriculture, Farm Service Agency'
-// });
-// var mapquestHYB = L.layerGroup([L.tileLayer("https://{s}.mqcdn.com/tiles/1.0.0/sat/{z}/{x}/{y}.jpg", {
-//     maxZoom: 18,
-//     subdomains: ["otile1-s", "otile2-s", "otile3-s", "otile4-s"]
-// }), L.tileLayer("https://{s}.mqcdn.com/tiles/1.0.0/hyb/{z}/{x}/{y}.png", {
-//     maxZoom: 19,
-//     subdomains: ["otile1-s", "otile2-s", "otile3-s", "otile4-s"],
-//     attribution: 'Labels courtesy of <a href="http://www.mapquest.com/" target="_blank">MapQuest</a> <img src="https://developer.mapquest.com/content/osm/mq_logo.png">. Map data (c) <a href="http://www.openstreetmap.org/" target="_blank">OpenStreetMap</a> contributors, CC-BY-SA. Portions Courtesy NASA/JPL-Caltech and U.S. Depart. of Agriculture, Farm Service Agency'
-// })]);
+var mapquestOSM = L.tileLayer("https://{s}.mqcdn.com/tiles/1.0.0/osm/{z}/{x}/{y}.png", {
+    maxZoom: 19,
+    subdomains: ["otile1-s", "otile2-s", "otile3-s", "otile4-s"],
+    attribution: 'Tiles courtesy of <a href="http://www.mapquest.com/" target="_blank">MapQuest</a> <img src="https://developer.mapquest.com/content/osm/mq_logo.png">. Map data (c) <a href="http://www.openstreetmap.org/" target="_blank">OpenStreetMap</a> contributors, CC-BY-SA.'
+});
+var mapquestOAM = L.tileLayer("https://{s}.mqcdn.com/tiles/1.0.0/sat/{z}/{x}/{y}.jpg", {
+    maxZoom: 18,
+    subdomains: ["otile1-s", "otile2-s", "otile3-s", "otile4-s"],
+    attribution: 'Tiles courtesy of <a href="http://www.mapquest.com/" target="_blank">MapQuest</a>. Portions Courtesy NASA/JPL-Caltech and U.S. Depart. of Agriculture, Farm Service Agency'
+});
+var mapquestHYB = L.layerGroup([L.tileLayer("https://{s}.mqcdn.com/tiles/1.0.0/sat/{z}/{x}/{y}.jpg", {
+    maxZoom: 18,
+    subdomains: ["otile1-s", "otile2-s", "otile3-s", "otile4-s"]
+}), L.tileLayer("https://{s}.mqcdn.com/tiles/1.0.0/hyb/{z}/{x}/{y}.png", {
+    maxZoom: 19,
+    subdomains: ["otile1-s", "otile2-s", "otile3-s", "otile4-s"],
+    attribution: 'Labels courtesy of <a href="http://www.mapquest.com/" target="_blank">MapQuest</a> <img src="https://developer.mapquest.com/content/osm/mq_logo.png">. Map data (c) <a href="http://www.openstreetmap.org/" target="_blank">OpenStreetMap</a> contributors, CC-BY-SA. Portions Courtesy NASA/JPL-Caltech and U.S. Depart. of Agriculture, Farm Service Agency'
+})]);
 
 /* Overlay Layers */
 var highlight = L.geoJson(null);
@@ -161,15 +161,7 @@ var brewster = L.geoJson(null, {
             opacity: 1,
             clickable: false
         };
-    },
-    // onEachFeature: function (feature, layer) {
-    //     boroughSearch.push({
-    //         name: layer.feature.properties.BoroName,
-    //         source: "Boroughs",
-    //         id: L.stamp(layer),
-    //         bounds: layer.getBounds()
-    //     });
-    // }
+    }
 });
 $.getJSON("data/brewster.geojson", function (data) {
     brewster.addData(data);
@@ -181,89 +173,6 @@ var highlightStyle = {
     fillOpacity: 0.7,
     radius: 10
 };
-
-// var boroughs = L.geoJson(null, {
-//   style: function (feature) {
-//     return {
-//       color: "black",
-//       fill: false,
-//       opacity: 1,
-//       clickable: false
-//     };
-//   },
-//   onEachFeature: function (feature, layer) {
-//     boroughSearch.push({
-//       name: layer.feature.properties.BoroName,
-//       source: "Boroughs",
-//       id: L.stamp(layer),
-//       bounds: layer.getBounds()
-//     });
-//   }
-// });
-// $.getJSON("data/boroughs.geojson", function (data) {
-//   boroughs.addData(data);
-// });
-
-//Create a color dictionary based off of subway route_id
-var subwayColors = {
-    "1": "#ff3135", "2": "#ff3135", "3": "ff3135", "4": "#009b2e",
-    "5": "#009b2e", "6": "#009b2e", "7": "#ce06cb", "A": "#fd9a00", "C": "#fd9a00",
-    "E": "#fd9a00", "SI": "#fd9a00", "H": "#fd9a00", "Air": "#ffff00", "B": "#ffff00",
-    "D": "#ffff00", "F": "#ffff00", "M": "#ffff00", "G": "#9ace00", "FS": "#6e6e6e",
-    "GS": "#6e6e6e", "J": "#976900", "Z": "#976900", "L": "#969696", "N": "#ffff00",
-    "Q": "#ffff00", "R": "#ffff00"
-};
-
-// var subwayLines = L.geoJson(null, {
-//   style: function (feature) {
-//       return {
-//         color: subwayColors[feature.properties.route_id],
-//         weight: 3,
-//         opacity: 1
-//       };
-//   },
-//   onEachFeature: function (feature, layer) {
-//     if (feature.properties) {
-//       var content = "<table class='table table-striped table-bordered table-condensed'>" + "<tr><th>Division</th><td>" + feature.properties.Division + "</td></tr>" + "<tr><th>Line</th><td>" + feature.properties.Line + "</td></tr>" + "<table>";
-//       layer.on({
-//         click: function (e) {
-//           $("#feature-title").html(feature.properties.Line);
-//           $("#feature-info").html(content);
-//           $("#featureModal").modal("show");
-//
-//         }
-//       });
-//     }
-//     layer.on({
-//       mouseover: function (e) {
-//         var layer = e.target;
-//         layer.setStyle({
-//           weight: 3,
-//           color: "#00FFFF",
-//           opacity: 1
-//         });
-//         if (!L.Browser.ie && !L.Browser.opera) {
-//           layer.bringToFront();
-//         }
-//       },
-//       mouseout: function (e) {
-//         subwayLines.resetStyle(e.target);
-//       }
-//     });
-//   }
-// });
-// $.getJSON("data/subways.geojson", function (data) {
-//   subwayLines.addData(data);
-// });
-
-
-/* Single marker cluster layer to hold all clusters */
-// var markerClusters = new L.MarkerClusterGroup({
-//   spiderfyOnMaxZoom: true,
-//   showCoverageOnHover: false,
-//   zoomToBoundsOnClick: true,
-//   disableClusteringAtZoom: 14
-// });
 
 var greenTree = L.MakiMarkers.icon({
     icon: "park",
@@ -365,13 +274,26 @@ $.getJSON("data/points.geojson", function (data) {
 map = L.map("map", {
     zoom: 13,
     center: [41.74737922562798, -70.0688695],
-    layers: [osm, brewster, parcels, points, highlight],
+    layers: [osm, brewster, points, highlight],
     zoomControl: false,
     attributionControl: false
 });
 
 L.control.navbar().addTo(map);
 
+map.on("zoomend", function (e) {
+    console.log("zoom level is " + map.getZoom())
+    zoom = map.getZoom();
+    if (zoom <= 15) {
+        map.removeLayer(parcels);
+        map.removeLayer(mapquestHYB);
+        map.addLayer(osm);
+    } else if (zoom > 14) {
+        map.addLayer(parcels);
+        map.removeLayer(osm);
+        map.addLayer(mapquestHYB);
+    }
+});
 
 /* Filter sidebar feature list to only show features in current map bounds */
 map.on("moveend", function (e) {
