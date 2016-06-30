@@ -98,7 +98,7 @@ function syncSidebar() {
     points.eachLayer(function (layer) {
         if (map.hasLayer(pointLayer)) {
             if (map.getBounds().contains(layer.getLatLng())) {
-                $("#feature-list tbody").append('<tr class="feature-row" id="' + L.stamp(layer) + '" lat="' + layer.getLatLng().lat + '" lng="' + layer.getLatLng().lng + '"><td style="vertical-align: middle;"></td><td class="feature-name">' + layer.feature.properties.GRANTOR + '</td><td style="vertical-align: middle;"><i class="fa fa-chevron-right pull-right"></i></td></tr>');
+                $("#feature-list tbody").append('<tr class="feature-row" id="' + L.stamp(layer) + '" lat="' + layer.getLatLng().lat + '" lng="' + layer.getLatLng().lng + '"><td style="vertical-align: middle;"><img width="16" height="18" src="assets/img/theater.png"></td><td class="feature-name">' + layer.feature.properties.GRANTOR + '</td><td style="vertical-align: middle;"><i class="fa fa-chevron-right pull-right"></i></td></tr>');
             }
         }
     });
@@ -241,7 +241,7 @@ var points = L.geoJson(null, {
                     } else {
                         ownerType = 'Conservation Restriction on Town Land';
                     }
-                    $("#feature-title").html(feature.properties.BCT + '<h4><strong>' + ownerType + '</h4></strong>');
+                    $("#feature-title").html(feature.properties.BCT + '<h5>' + ownerType + '</h5>');
                     $("#feature-info").html(content);
                     $("#featureModal").modal("show");
                     highlight.clearLayers().addLayer(L.circleMarker([feature.geometry.coordinates[1], feature.geometry.coordinates[0]], {
@@ -321,7 +321,7 @@ var attributionControl = L.control({
 });
 attributionControl.onAdd = function (map) {
     var div = L.DomUtil.create("div", "leaflet-control-attribution");
-    div.innerHTML = "<span class='hidden-xs'>Developed by <a href='http://bryanmcbride.com'>bryanmcbride.com</a> | </span><a href='#' onclick='$(\"#attributionModal\").modal(\"show\"); return false;'>Attribution</a>";
+    div.innerHTML = "<strong>Developed by CapeCodGIS</strong>";
     return div;
 };
 map.addControl(attributionControl);
