@@ -98,7 +98,7 @@ function syncSidebar() {
     points.eachLayer(function (layer) {
         if (map.hasLayer(pointLayer)) {
             if (map.getBounds().contains(layer.getLatLng())) {
-                $("#feature-list tbody").append('<tr class="feature-row" id="' + L.stamp(layer) + '" lat="' + layer.getLatLng().lat + '" lng="' + layer.getLatLng().lng + '"><td style="vertical-align: middle;"><img width="16" height="18" src="assets/img/theater.png"></td><td class="feature-name">' + layer.feature.properties.GRANTOR + '</td><td style="vertical-align: middle;"><i class="fa fa-chevron-right pull-right"></i></td></tr>');
+                $("#feature-list tbody").append('<tr class="feature-row" id="' + L.stamp(layer) + '" lat="' + layer.getLatLng().lat + '" lng="' + layer.getLatLng().lng + '"><td style="vertical-align: middle;"></td><td class="feature-name">' + layer.feature.properties.GRANTOR + '</td><td style="vertical-align: middle;"><i class="fa fa-chevron-right pull-right"></i></td></tr>');
             }
         }
     });
@@ -274,23 +274,23 @@ $.getJSON("data/points.geojson", function (data) {
 map = L.map("map", {
     zoom: 13,
     center: [41.74737922562798, -70.0688695],
-    layers: [osm, brewster, points, highlight],
+    layers: [pirate, brewster, points, highlight],
     zoomControl: false,
     attributionControl: false
 });
 
 L.control.navbar().addTo(map);
 
-map.on("zoomend", function (e) {
+map.on("zoomend", function (e) {   
     console.log("zoom level is " + map.getZoom())
     zoom = map.getZoom();
     if (zoom <= 15) {
         map.removeLayer(parcels);
         map.removeLayer(mapquestHYB);
-        map.addLayer(osm);
+        map.addLayer(pirate);
     } else if (zoom > 14) {
         map.addLayer(parcels);
-        map.removeLayer(osm);
+        map.removeLayer(pirate);
         map.addLayer(mapquestHYB);
     }
 });
