@@ -298,7 +298,7 @@ $.getJSON("data/points.geojson", function (data) {
 map = L.map("map", {
     zoom: 13,
     center: [41.74737922562798, -70.0688695],
-    layers: [Stamen_Watercolor, brewster, points, highlight],
+    layers: [mapquestOSM, brewster, points, highlight],
     zoomControl: false,
     attributionControl: false
 });
