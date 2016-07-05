@@ -149,6 +149,30 @@ var mapquestHYB = L.layerGroup([L.tileLayer("https://{s}.mqcdn.com/tiles/1.0.0/s
     attribution: 'Labels courtesy of <a href="http://www.mapquest.com/" target="_blank">MapQuest</a> <img src="https://developer.mapquest.com/content/osm/mq_logo.png">. Map data (c) <a href="http://www.openstreetmap.org/" target="_blank">OpenStreetMap</a> contributors, CC-BY-SA. Portions Courtesy NASA/JPL-Caltech and U.S. Depart. of Agriculture, Farm Service Agency'
 })]);
 
+var MapQuestOpen_OSM = L.tileLayer('http://otile{s}.mqcdn.com/tiles/1.0.0/{type}/{z}/{x}/{y}.{ext}', {
+	type: 'map',
+	ext: 'jpg',
+	attribution: 'Tiles Courtesy of <a href="http://www.mapquest.com/">MapQuest</a> &mdash; Map data &copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>',
+	subdomains: '1234'
+});
+
+var Thunderforest_TransportDark = L.tileLayer('http://{s}.tile.thunderforest.com/transport-dark/{z}/{x}/{y}.png', {
+	attribution: '&copy; <a href="http://www.thunderforest.com/">Thunderforest</a>, &copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>',
+	maxZoom: 19
+});
+
+var Thunderforest_Pioneer = L.tileLayer('http://{s}.tile.thunderforest.com/pioneer/{z}/{x}/{y}.png', {
+	attribution: '&copy; <a href="http://www.thunderforest.com/">Thunderforest</a>, &copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
+});
+
+var Stamen_Watercolor = L.tileLayer('http://stamen-tiles-{s}.a.ssl.fastly.net/watercolor/{z}/{x}/{y}.{ext}', {
+	attribution: 'Map tiles by <a href="http://stamen.com">Stamen Design</a>, <a href="http://creativecommons.org/licenses/by/3.0">CC BY 3.0</a> &mdash; Map data &copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>',
+	subdomains: 'abcd',
+	minZoom: 1,
+	maxZoom: 16,
+	ext: 'png'
+});
+
 /* Overlay Layers */
 var highlight = L.geoJson(null);
 
@@ -274,24 +298,24 @@ $.getJSON("data/points.geojson", function (data) {
 map = L.map("map", {
     zoom: 13,
     center: [41.74737922562798, -70.0688695],
-    layers: [pirate, brewster, points, highlight],
+    layers: [Stamen_Watercolor, brewster, points, highlight],
     zoomControl: false,
     attributionControl: false
 });
 
 L.control.navbar().addTo(map);
 
-map.on("zoomend", function (e) {   
+map.on("zoomend", function (e) {
     console.log("zoom level is " + map.getZoom())
     zoom = map.getZoom();
     if (zoom <= 15) {
         map.removeLayer(parcels);
-        map.removeLayer(mapquestHYB);
-        map.addLayer(pirate);
+        // map.removeLayer(mapquestHYB);
+        // map.addLayer(pirate);
     } else if (zoom > 14) {
         map.addLayer(parcels);
-        map.removeLayer(pirate);
-        map.addLayer(mapquestHYB);
+        // map.removeLayer(pirate);
+        // map.addLayer(mapquestHYB);
     }
 });
 
@@ -331,13 +355,32 @@ var zoomControl = L.control.zoom({
 }).addTo(map);
 
 
+
+//
 /* Larger screens get expanded layer control and visible sidebar */
 if (document.body.clientWidth <= 767) {
-    var isCollapsed = true;
+  var isCollapsed = true;
 } else {
-    var isCollapsed = false;
+  var isCollapsed = false;
 }
 
+var baseLayers = {
+  "Street Map": mapquestOSM,
+  "Aerial Imagery": mapquestOAM,
+  "Imagery with Streets": mapquestHYB
+};
+
+var groupedOverlays = {
+  "Points of Interest": {
+    "<img src='assets/img/theater.png' width='24' height='28'>&nbsp;Theaters": brewster,
+    "<img src='assets/img/museum.png' width='24' height='28'>&nbsp;Museums": brewster
+  }
+};
+
+var layerControl = L.control.groupedLayers(baseLayers, {
+  // collapsed: notCollapsed
+}).addTo(map);
+//
 
 /* Highlight search box text on click */
 $("#searchbox").click(function () {
