@@ -1,0 +1,59 @@
+bootleaf
+https://github.com/bmcbride/bootleaf.git
+
+
+bootstrap
+https://maxcdn.bootstrapcdn.com/bootswatch/3.3.6/yeti/bootstrap.min.css"
+
+
+font-awesome
+https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css
+
+Leaflet
+https://unpkg.com/leaflet@1.0.3/dist/leaflet.css
+https://unpkg.com/leaflet@1.0.3/dist/leaflet.js
+
+Bootleaf Dependencies
+https://api.tiles.mapbox.com/mapbox.js/plugins/leaflet-locatecontrol/v0.43.0/L.Control.Locate.css
+https://api.tiles.mapbox.com/mapbox.js/plugins/leaflet-locatecontrol/v0.43.0/L.Control.Locate.min.js
+assets/leaflet-groupedlayercontrol/leaflet.groupedlayercontrol.min.css
+assets/leaflet-groupedlayercontrol/leaflet.groupedlayercontrol.min.js
+https://cdnjs.cloudflare.com/ajax/libs/typeahead.js/0.10.5/typeahead.bundle.min.js
+https://cdnjs.cloudflare.com/ajax/libs/handlebars.js/3.0.3/handlebars.min.js
+https://cdnjs.cloudflare.com/ajax/libs/list.js/1.1.1/list.min.js
+
+Leaflet NavBar
+assets/js/leaflet.navbar/Leaflet.NavBar.css
+assets/js/leaflet.navbar/Leaflet.NavBar.js
+
+http://d3js.org/topojson.v1.min.js
+
+
+
+Leaflet Control Custom
+https://github.com/yigityuce/Leaflet.Control.Custom.git
+
+Leaflet MiniMap
+https://cdnjs.cloudflare.com/ajax/libs/leaflet-minimap/3.4.0/Control.MiniMap.min.js
+
+
+Leaflet MakiMarkers
+assets/js/Leaflet.MakiMarkers.js
+
+jQuery
+https://code.jquery.com/jquery-2.1.4.min.js
+
+
+Leaflet Providers
+https://cdnjs.cloudflare.com/ajax/libs/leaflet-providers/1.1.10/leaflet-providers.js
+
+Leflet Omnivore
+https://cdnjs.cloudflare.com/ajax/libs/leaflet-omnivore/0.3.4/leaflet-omnivore.min.js
+
+
+Leaflet Ajax
+https://cdnjs.cloudflare.com/ajax/libs/leaflet-ajax/2.1.0/leaflet.ajax.min.js
+
+
+Leaflet EasyPrint
+https://github.com/rowanwins/leaflet-easyPrint.git

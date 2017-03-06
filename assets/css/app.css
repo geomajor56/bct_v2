@@ -9,6 +9,7 @@ body {
 input[type="radio"], input[type="checkbox"] {
   margin: 0;
 }
+
 #sidebar {
   display: block;
   width: 250px;

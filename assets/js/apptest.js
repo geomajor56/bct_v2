@@ -1,4 +1,4 @@
-var map, featureList, pointSearch = [], panelLayer;
+var map, featureList, pointSearch = [];
 
 L.MakiMarkers.accessToken = "pk.eyJ1IjoiZ2VvbWFqb3I1NiIsImEiOiJjaW9iejZ4cGYwNDc0dnpsejBmc2g0Z3QzIn0.8hKDWYbdQW7cbIE7eeu4-A";
 
@@ -16,10 +16,6 @@ if (!("ontouchstart" in window)) {
         highlight.clearLayers().addLayer(L.circleMarker([$(this).attr("lat"), $(this).attr("lng")], highlightStyle));
     });
 }
-
-
-
-
 
 
 $(document).on("mouseout", ".feature-row", clearHighlight);
@@ -154,6 +150,22 @@ $.getJSON("data/brewster.geojson", function (data) {
     brewster.addData(data);
 });
 
+
+var parcels = new L.GeoJSON.AJAX("data/parcels.geojson", {
+    style: function (feature) {
+        return {
+            color: "red",
+            weight: 2,
+            fill: false,
+            opacity: 1,
+            clickable: false
+        };
+    },
+}).bindLabel('MultiPolygon\'s have labels as well :)');
+
+
+
+
 var highlightStyle = {
     stroke: false,
     fillColor: "#00FFFF",
@@ -179,18 +191,6 @@ var blueTree = L.MakiMarkers.icon({
 
 
 
-
-var parcels = new L.GeoJSON.AJAX("data/parcels.geojson", {
-    style: function (feature) {
-        return {
-            color: "red",
-            weight: 2,
-            fill: false,
-            opacity: 1,
-            clickable: false
-        };
-    },
-});
 
 
 var pointLayer = L.geoJson(null);
@@ -225,7 +225,7 @@ var points = L.geoJson(null, {
             layer.on({
                 click: function (e) {
                     if (feature.properties.OWNER_TYPE === "A") {
-                        ownerType = "BCT Owned Land";
+                        ownerType = "      Owned Land";
                     } else if (feature.properties.OWNER_TYPE === "B") {
                         ownerType = "Conservation Restriction on Private Land";
                     } else {
@@ -237,8 +237,8 @@ var points = L.geoJson(null, {
                     highlight.clearLayers().addLayer(L.circleMarker([feature.geometry.coordinates[1], feature.geometry.coordinates[0]], {
                         stroke: false,
                         fillColor: "#00FFFF",
-                         fillOpacity: 0.7,
-                        radius: 10
+                        fillOpacity: 0.7,
+                        radius: 20
                     }));
                 }
             });
@@ -264,28 +264,29 @@ $.getJSON("data/points.geojson", function (data) {
 map = L.map("map", {
     zoom: 13,
     center: [41.74737922562798, -70.0688695],
-    layers: [pirate, brewster, points, highlight],
+    layers: [pirate, brewster, parcels, points, highlight],
     zoomControl: false,
     attributionControl: false
 });
 
-map.addControl(panelLayers)
+
+L.easyPrint({
+    title: 'My awesome print button',
+    position: 'topleft',
+    elementsToHide: 'p, h2'
+}).addTo(map);
+
 
 L.control.navbar().addTo(map);
 
-map.on("zoomend", function (e) {
-    console.log("zowerom level is " + map.getZoom())
-    zoom = map.getZoom();
-    if (zoom <= 15) {
-        map.removeLayer(parcels);
-        // map.removeLayer(mapquestHYB);
-        // map.addLayer(pirate);
-    } else if (zoom > 14) {
-        map.addLayer(parcels);
-        // map.removeLayer(pirate);
-        // map.addLayer(mapquestHYB);
-    }
-});
+// map.on("zoomend", function (e) {
+//     zoom = map.getZoom();
+//     if (zoom <= 15) {
+//         map.removeLayer(parcels);
+//     } else if (zoom > 14) {
+//         map.addLayer(parcels)
+//     }
+// });
 
 /* Filter sidebar feature list to only show features in current map bounds */
 map.on("moveend", function (e) {
@@ -296,7 +297,6 @@ map.on("moveend", function (e) {
 map.on("click", function (e) {
     highlight.clearLayers();
 });
-
 
 
 /* Attribution control */
@@ -325,13 +325,12 @@ var zoomControl = L.control.zoom({
 }).addTo(map);
 
 
-
 //
 /* Larger screens get expanded layer control and visible sidebar */
 if (document.body.clientWidth <= 767) {
-  var isCollapsed = true;
+    var isCollapsed = true;
 } else {
-  var isCollapsed = false;
+    var isCollapsed = false;
 }
 
 // var baseLayers = {
@@ -341,10 +340,10 @@ if (document.body.clientWidth <= 767) {
 // };
 
 var groupedOverlays = {
-  "Points of Interest": {
-    "<img src='assets/img/theater.png' width='24' height='28'>&nbsp;Theaters": brewster,
-    "<img src='assets/img/museum.png' width='24' height='28'>&nbsp;Museums": brewster
-  }
+    "Points of Interest": {
+        "<img src='assets/img/theater.png' width='24' height='28'>&nbsp;Theaters": brewster,
+        "<img src='assets/img/museum.png' width='24' height='28'>&nbsp;Museums": brewster
+    }
 };
 
 
@@ -431,11 +430,6 @@ $(document).one("ajaxStop", function () {
     });
     $(".twitter-typeahead").css("position", "static");
     $(".twitter-typeahead").css("display", "block");
-
-
-
-
-
 
 
 });
