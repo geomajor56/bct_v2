@@ -1,5 +1,6 @@
 var map, featureList, pointSearch = [];
 
+// L.MakiMarkers.accessToken = "wNDc0dnpsejBmc2g0Zpk.eyJ1IjoiZ2VvbWFqb3I1NiIsImEiOiJjaW9iejZ4cGY3QzIn0.8hKDWYbdQW7cbIE7eeu4-A";
 L.MakiMarkers.accessToken = "pk.eyJ1IjoiZ2VvbWFqb3I1NiIsImEiOiJjaW9iejZ4cGYwNDc0dnpsejBmc2g0Z3QzIn0.8hKDWYbdQW7cbIE7eeu4-A";
 
 $(window).resize(function () {
@@ -55,7 +56,7 @@ $("#sidebar-hide-btn").click(function () {
 function animateSidebar() {
     $("#sidebar").animate({
         width: "toggle"
-    }, 350, function () {
+    }, 500, function () {
         map.invalidateSize();
     });
 }
@@ -119,13 +120,13 @@ pirate = L.tileLayer.provider('MapBox', {
 });
 
 
-// var Stamen_Watercolor = L.tileLayer('http://stamen-tiles-{s}.a.ssl.fastly.net/watercolor/{z}/{x}/{y}.{ext}', {
-// 	attribution: 'Map tiles by <a href="http://stamen.com">Stamen Design</a>, <a href="http://creativecommons.org/licenses/by/3.0">CC BY 3.0</a> &mdash; Map data &copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>',
-// 	subdomains: 'abcd',
-// 	minZoom: 1,
-// 	maxZoom: 16,
-// 	ext: 'png'
-// });
+var Stamen_Watercolor = L.tileLayer('http://stamen-tiles-{s}.a.ssl.fastly.net/watercolor/{z}/{x}/{y}.{ext}', {
+    attribution: 'Map tiles by <a href="http://stamen.com">Stamen Design</a>, <a href="http://creativecommons.org/licenses/by/3.0">CC BY 3.0</a> &mdash; Map data &copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>',
+    subdomains: 'abcd',
+    minZoom: 1,
+    maxZoom: 16,
+    ext: 'png'
+});
 
 
 var Esri_WorldImagery = L.tileLayer('http://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {
@@ -134,6 +135,12 @@ var Esri_WorldImagery = L.tileLayer('http://server.arcgisonline.com/ArcGIS/rest/
 
 /* Overlay Layers */
 var highlight = L.geoJson(null);
+
+
+/*    BCT Layers Points and polygons      */
+
+
+// Brewster Town Lines
 
 var brewster = L.geoJson(null, {
     style: function (feature) {
@@ -146,10 +153,29 @@ var brewster = L.geoJson(null, {
         };
     }
 });
-$.getJSON("data/brewster.geojson", function (data) {
-    brewster.addData(data);
+
+
+var tooltip = L.tooltip({
+    position: 'left',
+    noWrap: true
 });
 
+$.getJSON("data/brewster.geojson", function (data) {
+    brewster.addData(data).bindLabel('A sweet static label!', {noHide: true, direction: 'center'});
+});
+
+
+// var parcels = new L.GeoJSON.AJAX("data/parcels.geojson", {
+//     style: function (feature) {
+//         return {
+//             color: "red",
+//             weight: 2,
+//             fill: false,
+//             opacity: 1,
+//             clickable: false
+//         };
+//     }
+// });
 
 var parcels = new L.GeoJSON.AJAX("data/parcels.geojson", {
     style: function (feature) {
@@ -160,9 +186,8 @@ var parcels = new L.GeoJSON.AJAX("data/parcels.geojson", {
             opacity: 1,
             clickable: false
         };
-    },
-}).bindLabel('MultiPolygon\'s have labels as well :)');
-
+    }
+});
 
 
 
@@ -190,9 +215,6 @@ var blueTree = L.MakiMarkers.icon({
 });
 
 
-
-
-
 var pointLayer = L.geoJson(null);
 var points = L.geoJson(null, {
     pointToLayer: function (feature, latlng) {
@@ -202,6 +224,7 @@ var points = L.geoJson(null, {
                 title: feature.properties.BCT,
                 riseOnHover: true
             });
+
         } else if (feature.properties.OWNER_TYPE === "B") {
             return L.marker(latlng, {
                 icon: blueTree,
@@ -219,26 +242,24 @@ var points = L.geoJson(null, {
     },
     onEachFeature: function (feature, layer) {
         if (feature.properties) {
-
-
             var content = "<table class='table table-striped table-bordered table-condensed'>" + "<tr><th>Name</th><td>" + feature.properties.GRANTOR + "</td></tr>" + "<tr><th>Date Acquired</th><td>" + feature.properties.ACQUIRED + "</td></tr>" + "<tr><th>Habitat</th><td>" + feature.properties.HABITAT + "</td></tr>" + "<tr><th>Total Acres</th><td>" + feature.properties.TOTAL + "</td></tr>" + "<table>";
             layer.on({
                 click: function (e) {
                     if (feature.properties.OWNER_TYPE === "A") {
-                        ownerType = "      Owned Land";
+                        ownerType = "Parcel Type: BCT Owned Land";
                     } else if (feature.properties.OWNER_TYPE === "B") {
-                        ownerType = "Conservation Restriction on Private Land";
+                        ownerType = "Parcel Type: Conservation Restriction on Private Land";
                     } else {
-                        ownerType = 'Conservation Restriction on Town Land';
+                        ownerType = 'Parcel Type: Conservation Restriction on Town Land';
                     }
-                    $("#feature-title").html(feature.properties.BCT + '<h5>' + ownerType + '</h5>');
+                    $("#feature-title").html('BCT Parcel Number: ' + feature.properties.BCT + '<h4>' + ownerType + '</h4>');
                     $("#feature-info").html(content);
                     $("#featureModal").modal("show");
                     highlight.clearLayers().addLayer(L.circleMarker([feature.geometry.coordinates[1], feature.geometry.coordinates[0]], {
                         stroke: false,
                         fillColor: "#00FFFF",
                         fillOpacity: 0.7,
-                        radius: 20
+                        radius: 25
                     }));
                 }
             });
@@ -264,11 +285,10 @@ $.getJSON("data/points.geojson", function (data) {
 map = L.map("map", {
     zoom: 13,
     center: [41.74737922562798, -70.0688695],
-    layers: [pirate, brewster, parcels, points, highlight],
+    layers: [pirate, brewster, points, highlight],
     zoomControl: false,
     attributionControl: false
 });
-
 
 L.easyPrint({
     title: 'My awesome print button',
@@ -277,7 +297,29 @@ L.easyPrint({
 }).addTo(map);
 
 
+map.addLayer(parcels);
+
+
 L.control.navbar().addTo(map);
+
+//    Legend Control
+
+var legend = L.control({position: 'topright'});
+
+legend.onAdd = function (map) {
+	var div = L.DomUtil.create('div', 'legend');
+	div.innerHTML +=  '<img src="assets/img/greenTree.png">' + '     BCT Owned Land' + '<br>'
+	// div.innerHTML +=  '<b>';
+	div.innerHTML +=  '<img src="assets/img/blueTree.png">'  + '     Conservation Restriction on Private Land' + '<br>'
+    // div.innerHTML +=  '<b>';
+	div.innerHTML +=  '<img src="assets/img/redTree.png">'   +  '     Conservation Restriction on Town Land'
+
+	return div;
+};
+
+legend.addTo(map);
+
+//
 
 // map.on("zoomend", function (e) {
 //     zoom = map.getZoom();
@@ -431,7 +473,11 @@ $(document).one("ajaxStop", function () {
     $(".twitter-typeahead").css("position", "static");
     $(".twitter-typeahead").css("display", "block");
 
-
+ $("#sidebar").animate({
+        width: "toggle"
+    }, 2500, function () {
+        map.invalidateSize();
+    });
 });
 
 // Leaflet patch to make layer control scrollable on touch browsers
