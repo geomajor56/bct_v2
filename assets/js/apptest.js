@@ -308,11 +308,11 @@ var legend = L.control({position: 'topright'});
 
 legend.onAdd = function (map) {
 	var div = L.DomUtil.create('div', 'legend');
-	div.innerHTML +=  '<img src="assets/img/greenTree.png">' + '     BCT Owned Land' + '<br>'
+	div.innerHTML +=  '<img src="assets/img/newGreenTree.png">' + '     BCT Owned Land' + '<br>'
 	// div.innerHTML +=  '<b>';
-	div.innerHTML +=  '<img src="assets/img/blueTree.png">'  + '     Conservation Restriction on Private Land' + '<br>'
+	div.innerHTML +=  '<img src="assets/img/newBlueTree.png">'  + '     Conservation Restriction on Private Land' + '<br>'
     // div.innerHTML +=  '<b>';
-	div.innerHTML +=  '<img src="assets/img/redTree.png">'   +  '     Conservation Restriction on Town Land'
+	div.innerHTML +=  '<img src="assets/img/newRedTree.png">'   +  '     Conservation Restriction on Town Land'
 
 	return div;
 };
