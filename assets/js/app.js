@@ -1,3 +1,9 @@
+// google api key AIzaSyBCClRgiRpELqaFFjt1V929S6aevHJxXOQ
+// AIzaSyCZCou0awDsld16RrRKjMeQN4Mx_Ue89iY
+// <script async defer src="https://maps.googleapis.com/maps/api/js?key=YOUR_API_KEY&callback=initMap"
+//   type="text/javascript"></script>
+
+
 var map, featureList, pointSearch = [], panelLayer;
 
 L.MakiMarkers.accessToken = "pk.eyJ1IjoiZ2VvbWFqb3I1NiIsImEiOiJjaW9iejZ4cGYwNDc0dnpsejBmc2g0Z3QzIn0.8hKDWYbdQW7cbIE7eeu4-A";
@@ -16,10 +22,6 @@ if (!("ontouchstart" in window)) {
         highlight.clearLayers().addLayer(L.circleMarker([$(this).attr("lat"), $(this).attr("lng")], highlightStyle));
     });
 }
-
-
-
-
 
 
 $(document).on("mouseout", ".feature-row", clearHighlight);
@@ -105,36 +107,42 @@ function syncSidebar() {
     });
 }
 
+
+
 /* Basemap Layers */
 
 
-mapLink = '<a href="http://openstreetmap.org">OpenStreetMap</a>';
-osm = L.tileLayer(
-    'http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-        //attribution: '&copy; ' + mapLink + ' Contributors',
-        maxZoom: 17
+var google_streets = L.gridLayer.googleMutant({
+    type: 'roadmap',
     });
 
-watercolor = L.tileLayer.provider('Stamen.Watercolor');
+var google_satellite = L.gridLayer.googleMutant({
+    type: 'hybrid',
+    });
 
-pirate = L.tileLayer.provider('MapBox', {
-    id: 'geomajor56.05gcbj88',
-    accessToken: 'pk.eyJ1IjoiZ2VvbWFqb3I1NiIsImEiOiJjaW9iejZ4cGYwNDc0dnpsejBmc2g0Z3QzIn0.8hKDWYbdQW7cbIE7eeu4-A'
-});
+var google_terrain = L.gridLayer.googleMutant({
+    type: 'terrain',
+    });
+
+mapbox_satellite = L.tileLayer(
+    'https://api.mapbox.com/styles/v1/mapbox/satellite-streets-v10/tiles/256/{z}/{x}/{y}?access_token=pk.eyJ1IjoiZ2VvbWFqb3I1NiIsImEiOiJjaW9iejZ4cGYwNDc0dnpsejBmc2g0Z3QzIn0.8hKDWYbdQW7cbIE7eeu4-A'
+);
+
+mapbox_outdoors = L.tileLayer('https://api.mapbox.com/styles/v1/mapbox/outdoors-v10/tiles/256/{z}/{x}/{y}?access_token=pk.eyJ1IjoiZ2VvbWFqb3I1NiIsImEiOiJjaW9iejZ4cGYwNDc0dnpsejBmc2g0Z3QzIn0.8hKDWYbdQW7cbIE7eeu4-A'
+
+);
 
 
-// var Stamen_Watercolor = L.tileLayer('http://stamen-tiles-{s}.a.ssl.fastly.net/watercolor/{z}/{x}/{y}.{ext}', {
-// 	attribution: 'Map tiles by <a href="http://stamen.com">Stamen Design</a>, <a href="http://creativecommons.org/licenses/by/3.0">CC BY 3.0</a> &mdash; Map data &copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>',
-// 	subdomains: 'abcd',
-// 	minZoom: 1,
-// 	maxZoom: 16,
-// 	ext: 'png'
-// });
+var baseLayers = {
+  "Street Map": mapbox_outdoors,
+  "Aerial Imagery": mapbox_satellite
 
+};
 
-var Esri_WorldImagery = L.tileLayer('http://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {
-    attribution: 'Tiles &copy; Esri &mdash; Source: Esri, i-cubed, USDA, USGS, AEX, GeoEye, Getmapping, Aerogrid, IGN, IGP, UPR-EGP, and the GIS User Community'
-});
+// var layerControl = L.control.groupedLayers(baseLayers, {
+//     }).addTo(map);
+//
+
 
 /* Overlay Layers */
 var highlight = L.geoJson(null);
@@ -219,8 +227,6 @@ var points = L.geoJson(null, {
     },
     onEachFeature: function (feature, layer) {
         if (feature.properties) {
-
-
             var content = "<table class='table table-striped table-bordered table-condensed'>" + "<tr><th>Name</th><td>" + feature.properties.GRANTOR + "</td></tr>" + "<tr><th>Date Acquired</th><td>" + feature.properties.ACQUIRED + "</td></tr>" + "<tr><th>Habitat</th><td>" + feature.properties.HABITAT + "</td></tr>" + "<tr><th>Total Acres</th><td>" + feature.properties.TOTAL + "</td></tr>" + "<table>";
             layer.on({
                 click: function (e) {
@@ -264,28 +270,47 @@ $.getJSON("data/points.geojson", function (data) {
 map = L.map("map", {
     zoom: 13,
     center: [41.74737922562798, -70.0688695],
-    layers: [pirate, brewster, points, highlight],
+    layers: [google_terrain, brewster, points, highlight],
     zoomControl: false,
     attributionControl: false
 });
+// *********************************Leaflet Plugins***************************************************************
+var legend = L.control({position: 'topleft'});
 
-map.addControl(panelLayers)
+legend.onAdd = function (map) {
+    var div = L.DomUtil.create('div', 'legend');
+    div.innerHTML += '<img src="assets/img/newGreenTree.png">' + '     BCT Owned Land' + '&nbsp'+ '&nbsp'+
+    '<img src="assets/img/newBlueTree.png">' + '     Conservation Restriction on Private Land' + '&nbsp'+ '&nbsp'+
+    '<img src="assets/img/newRedTree.png">' + '     Conservation Restriction on Town Land' +'&nbsp'+ '&nbsp'
 
+    return div;
+};
+
+legend.addTo(map);
 L.control.navbar().addTo(map);
 
-map.on("zoomend", function (e) {
-    console.log("zowerom level is " + map.getZoom())
-    zoom = map.getZoom();
-    if (zoom <= 15) {
-        map.removeLayer(parcels);
-        // map.removeLayer(mapquestHYB);
-        // map.addLayer(pirate);
-    } else if (zoom > 14) {
-        map.addLayer(parcels);
-        // map.removeLayer(pirate);
-        // map.addLayer(mapquestHYB);
-    }
-});
+L.easyPrint({
+    title: 'My awesome print button',
+    position: 'topleft',
+    elementsToHide: 'p, h2'
+}).addTo(map);
+
+
+// ************************************************************************************************
+
+// map.on("zoomend", function (e) {
+//     console.log("zowerom level is " + map.getZoom())
+//     zoom = map.getZoom();
+//     if (zoom <= 15) {
+//         map.removeLayer(parcels);
+//         // map.removeLayer(mapquestHYB);
+//         // map.addLayer(pirate);
+//     } else if (zoom > 14) {
+//         map.addLayer(parcels);
+//         // map.removeLayer(pirate);
+//         // map.addLayer(mapquestHYB);
+//     }
+// });
 
 /* Filter sidebar feature list to only show features in current map bounds */
 map.on("moveend", function (e) {
@@ -433,7 +458,11 @@ $(document).one("ajaxStop", function () {
     $(".twitter-typeahead").css("display", "block");
 
 
-
+$("#sidebar").animate({
+        width: "toggle"
+    }, 1500, function () {
+        map.invalidateSize();
+    });
 
 
 

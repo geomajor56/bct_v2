@@ -14,16 +14,14 @@
     <link href="https://maxcdn.bootstrapcdn.com/bootswatch/3.3.6/yeti/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css">
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.0.3/dist/leaflet.css" />
-    <!--<script src="https://www.mapquestapi.com/sdk/leaflet/v2.s/mq-map.js?key=hgau0CEU6Y07tAkhJWo8EIKnYnXozTBY"></script>-->
-    <!--<script src="https://www.mapquestapi.com/sdk/leaflet/v2.2/mq-map.js?key=hgau0CEU6Y07tAkhJWo8EIKnYnXozTBY"></script>-->
+
+   <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBCClRgiRpELqaFFjt1V929S6aevHJxXOQ&callback=initMap"
+   type="text/javascript"></script>
 
     <link rel="stylesheet" href="https://api.tiles.mapbox.com/mapbox.js/plugins/leaflet-locatecontrol/v0.43.0/L.Control.Locate.css">
     <link rel="stylesheet" href="assets/leaflet-groupedlayercontrol/leaflet.groupedlayercontrol.min.css">
     <link rel="stylesheet" href="assets/js/leaflet.navbar/Leaflet.NavBar.css">
-    <link rel="stylesheet" href="assets/js/leaflet.label.css">
-    <!--<link rel="stylesheet" href="assets/js/leaflet-legend.css">-->
-
-    <link rel="stylesheet" href="assets/css/app.css">
+        <link rel="stylesheet" href="assets/css/app.css">
     <link rel="stylesheet" href="assets/js/leaflet-panel-layers.css">
 
     <link rel="apple-touch-icon" sizes="76x76" href="assets/img/favicon-76.png">
@@ -51,15 +49,15 @@
             <!--</div>-->
           <!--</form>-->
           <ul class="nav navbar-nav">
-            <!--<li><a href="#" data-toggle="collapse" data-target=".navbar-collapse.in" id="about-btn"><i class="fa fa-question-circle white"></i>&nbsp;&nbsp;About</a></li>-->
-            <!--<li class="dropdown">-->
-              <!--<a id="toolsDrop" href="#" role="button" class="dropdown-toggle" data-toggle="dropdown"><i class="fa fa-globe white"></i>&nbsp;&nbsp;Tools <b class="caret"></b></a>-->
-              <!--<ul class="dropdown-menu">-->
-                <!--<li><a href="#" data-toggle="collapse" data-target=".navbar-collapse.in" id="full-extent-btn"><i class="fa fa-arrows-alt"></i>&nbsp;&nbsp;Zoom To Full Extent</a></li>-->
-                <!--<li><a href="#" data-toggle="collapse" data-target=".navbar-collapse.in" id="legend-btn"><i class="fa fa-picture-o"></i>&nbsp;&nbsp;Show Legend</a></li>-->
-                <!--<li class="divider hidden-xs"></li>-->
-                <!--<li><a href="#" data-toggle="collapse" data-target=".navbar-collapse.in" id="login-btn"><i class="fa fa-user"></i>&nbsp;&nbsp;Login</a></li>-->
-              <!--</ul>-->
+            <li><a href="#" data-toggle="collapse" data-target=".navbar-collapse.in" id="about-btn"><i class="fa fa-question-circle white"></i>&nbsp;&nbsp;About</a></li>
+            <li class="dropdown">
+              <a id="toolsDrop" href="#" role="button" class="dropdown-toggle" data-toggle="dropdown"><i class="fa fa-globe white"></i>&nbsp;&nbsp;Tools <b class="caret"></b></a>
+              <ul class="dropdown-menu">
+                <li><a href="#" data-toggle="collapse" data-target=".navbar-collapse.in" id="full-extent-btn"><i class="fa fa-arrows-alt"></i>&nbsp;&nbsp;Zoom To Full Extent</a></li>
+                <li><a href="#" data-toggle="collapse" data-target=".navbar-collapse.in" id="legend-btn"><i class="fa fa-picture-o"></i>&nbsp;&nbsp;Show Legend</a></li>
+                <li class="divider hidden-xs"></li>
+                <li><a href="#" data-toggle="collapse" data-target=".navbar-collapse.in" id="login-btn"><i class="fa fa-user"></i>&nbsp;&nbsp;Login</a></li>
+              </ul>
             </li>
             <!--<li class="dropdown">-->
                 <!--<a class="dropdown-toggle" id="downloadDrop" href="#" role="button" data-toggle="dropdown"><i class="fa fa-cloud-download white"></i>&nbsp;&nbsp;Download <b class="caret"></b></a>-->
@@ -226,6 +224,9 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/handlebars.js/3.0.3/handlebars.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/list.js/1.1.1/list.min.js"></script>
     <script src="https://unpkg.com/leaflet@1.0.3/dist/leaflet.js"></script>
+
+    <script src='https://unpkg.com/leaflet.gridlayer.googlemutant@latest/Leaflet.GoogleMutant.js'></script>
+
     <script src="assets/js/leaflet-panel-layers.js"></script>
     <!--<script src="assets/js/leaflet-legend.js"></script>-->
 
@@ -239,7 +240,7 @@
     <script src="assets/js/leaflet.easyPrint.js"></script>
     <script src="assets/js/leaflet.label.js"></script>
 
-    <script src="assets/js/apptest.js"></script>
+    <script src="assets/js/app.js"></script>
   </body>
 </html>
 v

@@ -18,7 +18,6 @@ if (!("ontouchstart" in window)) {
     });
 }
 
-
 $(document).on("mouseout", ".feature-row", clearHighlight);
 
 $("#about-btn").click(function () {
@@ -104,34 +103,14 @@ function syncSidebar() {
 
 /* Basemap Layers */
 
+mapbox_satellite = L.tileLayer(
+    'https://api.mapbox.com/styles/v1/mapbox/satellite-streets-v10/tiles/256/{z}/{x}/{y}?access_token=pk.eyJ1IjoiZ2VvbWFqb3I1NiIsImEiOiJjaW9iejZ4cGYwNDc0dnpsejBmc2g0Z3QzIn0.8hKDWYbdQW7cbIE7eeu4-A'
+);
 
-mapLink = '<a href="http://openstreetmap.org">OpenStreetMap</a>';
-osm = L.tileLayer(
-    'http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-        //attribution: '&copy; ' + mapLink + ' Contributors',
-        maxZoom: 17
-    });
+mapbox_outdoors = L.tileLayer('https://api.mapbox.com/styles/v1/mapbox/outdoors-v10/tiles/256/{z}/{x}/{y}?access_token=pk.eyJ1IjoiZ2VvbWFqb3I1NiIsImEiOiJjaW9iejZ4cGYwNDc0dnpsejBmc2g0Z3QzIn0.8hKDWYbdQW7cbIE7eeu4-A'
 
-watercolor = L.tileLayer.provider('Stamen.Watercolor');
+);
 
-pirate = L.tileLayer.provider('MapBox', {
-    id: 'geomajor56.05gcbj88',
-    accessToken: 'pk.eyJ1IjoiZ2VvbWFqb3I1NiIsImEiOiJjaW9iejZ4cGYwNDc0dnpsejBmc2g0Z3QzIn0.8hKDWYbdQW7cbIE7eeu4-A'
-});
-
-
-var Stamen_Watercolor = L.tileLayer('http://stamen-tiles-{s}.a.ssl.fastly.net/watercolor/{z}/{x}/{y}.{ext}', {
-    attribution: 'Map tiles by <a href="http://stamen.com">Stamen Design</a>, <a href="http://creativecommons.org/licenses/by/3.0">CC BY 3.0</a> &mdash; Map data &copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>',
-    subdomains: 'abcd',
-    minZoom: 1,
-    maxZoom: 16,
-    ext: 'png'
-});
-
-
-var Esri_WorldImagery = L.tileLayer('http://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {
-    attribution: 'Tiles &copy; Esri &mdash; Source: Esri, i-cubed, USDA, USGS, AEX, GeoEye, Getmapping, Aerogrid, IGN, IGP, UPR-EGP, and the GIS User Community'
-});
 
 /* Overlay Layers */
 var highlight = L.geoJson(null);
@@ -161,21 +140,9 @@ var tooltip = L.tooltip({
 });
 
 $.getJSON("data/brewster.geojson", function (data) {
-    brewster.addData(data).bindLabel('A sweet static label!', {noHide: true, direction: 'center'});
+    brewster.addData(data);
 });
 
-
-// var parcels = new L.GeoJSON.AJAX("data/parcels.geojson", {
-//     style: function (feature) {
-//         return {
-//             color: "red",
-//             weight: 2,
-//             fill: false,
-//             opacity: 1,
-//             clickable: false
-//         };
-//     }
-// });
 
 var parcels = new L.GeoJSON.AJAX("data/parcels.geojson", {
     style: function (feature) {
@@ -188,7 +155,6 @@ var parcels = new L.GeoJSON.AJAX("data/parcels.geojson", {
         };
     }
 });
-
 
 
 var highlightStyle = {
@@ -281,11 +247,51 @@ $.getJSON("data/points.geojson", function (data) {
     map.addLayer(pointLayer);
 });
 
+// *******************************************************************************************************
 
+
+// var promise = $.getJSON("data/points.geojson");
+//     promise.then(function(data) {
+//
+//
+//         var allPoints = L.geoJson(data);
+//
+//         // THIS IS NEW
+//         var a = L.geoJson(data, {
+//             filter: function(feature, layer) {
+//                 return feature.properties.OWNER_TYPE === "A";
+//             }
+//         });
+//
+//         var b = L.geoJson(data, {
+//             filter: function(feature, layer) {
+//                 return feature.properties.OWNER_TYPE === "B";
+//             }
+//         });
+//
+//         var c = L.geoJson(data, {
+//             filter: function (feature, layer) {
+//                 return feature.properties.OWNER_TYPE === "C"
+//
+//             }
+//         });
+//
+//         // map.fitBounds(allbusinesses.getBounds(), {
+//         //     padding: [50, 50]
+//         // });
+//
+//         // THIS IS NEW
+//         a.addTo(map);
+//         b.addTo(map);
+//         c.addTo(map);
+//     });
+
+
+// *******************************************************************************************************
 map = L.map("map", {
     zoom: 13,
     center: [41.74737922562798, -70.0688695],
-    layers: [pirate, brewster, points, highlight],
+    layers: [mapbox_satellite, brewster, points,  highlight],
     zoomControl: false,
     attributionControl: false
 });
@@ -295,7 +301,6 @@ L.easyPrint({
     position: 'topleft',
     elementsToHide: 'p, h2'
 }).addTo(map);
-
 
 map.addLayer(parcels);
 
@@ -307,14 +312,14 @@ L.control.navbar().addTo(map);
 var legend = L.control({position: 'topright'});
 
 legend.onAdd = function (map) {
-	var div = L.DomUtil.create('div', 'legend');
-	div.innerHTML +=  '<img src="assets/img/newGreenTree.png">' + '     BCT Owned Land' + '<br>'
-	// div.innerHTML +=  '<b>';
-	div.innerHTML +=  '<img src="assets/img/newBlueTree.png">'  + '     Conservation Restriction on Private Land' + '<br>'
+    var div = L.DomUtil.create('div', 'legend');
+    div.innerHTML += '<img src="assets/img/newGreenTree.png">' + '     BCT Owned Land' + '<br>'
     // div.innerHTML +=  '<b>';
-	div.innerHTML +=  '<img src="assets/img/newRedTree.png">'   +  '     Conservation Restriction on Town Land'
+    div.innerHTML += '<img src="assets/img/newBlueTree.png">' + '     Conservation Restriction on Private Land' + '<br>'
+    // div.innerHTML +=  '<b>';
+    div.innerHTML += '<img src="assets/img/newRedTree.png">' + '     Conservation Restriction on Town Land'
 
-	return div;
+    return div;
 };
 
 legend.addTo(map);
@@ -376,23 +381,22 @@ if (document.body.clientWidth <= 767) {
 }
 
 // var baseLayers = {
-//   "Street Map": osm,
-//   "Aerial Imagery": Esri_WorldImagery,
-//   "Imagery with Streets": Esri_WorldImagery
+//   "Street Map": mapbox_outdoors,
+//   "Aerial Imagery": mapbox_satellite
+//
 // };
 
-var groupedOverlays = {
-    "Points of Interest": {
-        "<img src='assets/img/theater.png' width='24' height='28'>&nbsp;Theaters": brewster,
-        "<img src='assets/img/museum.png' width='24' height='28'>&nbsp;Museums": brewster
-    }
-};
+// var groupedOverlays = {
+//     "Points of Interest": {
+//         "<img src='assets/img/theater.png' width='24' height='28'>&nbsp;Theaters": brewster,
+//         "<img src='assets/img/museum.png' width='24' height='28'>&nbsp;Museums": brewster
+//     }
+// };
 
 
 // var layerControl = L.control.groupedLayers(baseLayers, {
-//   collapsed: notCollapsed
-// }).addTo(map);
-//
+//     }).addTo(map);
+
 
 /* Highlight search box text on click */
 $("#searchbox").click(function () {
@@ -473,7 +477,7 @@ $(document).one("ajaxStop", function () {
     $(".twitter-typeahead").css("position", "static");
     $(".twitter-typeahead").css("display", "block");
 
- $("#sidebar").animate({
+    $("#sidebar").animate({
         width: "toggle"
     }, 2500, function () {
         map.invalidateSize();
